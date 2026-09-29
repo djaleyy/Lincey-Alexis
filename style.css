@@ -1,15 +1,15 @@
 /* ==========================================
-   DESIGN SYSTEM ÉLÉGANT & LAVANDE DOUCE
+   DESIGN SYSTEM ÉLÉGANT & LAVANDE DOUCE ET LUMINEUSE
    ========================================== */
 :root {
-    --primary-color: #cbb4d4;       /* Lavande champagne douce */
-    --secondary-color: #b89bce;     /* Lavande poudrée */
-    --accent-glow: #e6d5f2;         /* Lavande lumineuse */
-    --bg-dark: #121017;             /* Anthracite Nuit & Violet profond */
-    --card-glass: rgba(255, 255, 255, 0.04);
-    --card-border: rgba(203, 180, 212, 0.18);
-    --text-main: #fcfbfe;            /* Blanc ivoire pur */
-    --text-muted: #dcd4e4;           /* Lavande-gris poivré doux */
+    --primary-color: #e2cded;       /* Lavande champagne brillante */
+    --secondary-color: #d0b4e0;     /* Lavande poudrée lumineuse */
+    --accent-glow: #ffffff;         /* Éclat blanc pur */
+    --bg-dark: #1e172a;             /* Violet nuit riche et plus clair */
+    --card-glass: rgba(255, 255, 255, 0.11);
+    --card-border: rgba(225, 200, 238, 0.38);
+    --text-main: #ffffff;            /* Blanc pur 100% lisibilité */
+    --text-muted: #ede3f4;           /* Lavande claire haute lisibilité */
 }
 
 * {
@@ -21,11 +21,11 @@
 body {
     font-family: 'Outfit', sans-serif;
     background-color: var(--bg-dark);
-    /* Dégradé d'ambiance lavande nuit chic */
+    /* Dégradé d'ambiance lavande vibrante et chaleureuse */
     background-image: 
-        radial-gradient(circle at 20% 20%, rgba(62, 45, 75, 0.6) 0%, transparent 45%),
-        radial-gradient(circle at 80% 80%, rgba(45, 36, 58, 0.5) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, #17131e 0%, #0d0b12 100%);
+        radial-gradient(circle at 20% 20%, rgba(105, 75, 128, 0.65) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(85, 58, 105, 0.55) 0%, transparent 55%),
+        radial-gradient(circle at 50% 50%, #231b30 0%, #15101f 100%);
     background-attachment: fixed;
     color: var(--text-main);
     min-height: 100vh;
@@ -38,61 +38,39 @@ body {
 }
 
 /* ==========================================
-   PLUIE DE PÉTALES DE ROSE FLOTTANTS ET ÉLÉGANTS
+   PLUIE DE CONFETTIS FESTIFS ET ÉLÉGANTS EN ARRIÈRE-PLAN
    ========================================== */
 #particles-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 1;
-    overflow: hidden;
+    display: none !important;
 }
 
-.petal {
+.confetti-particle {
     position: absolute;
-    top: -40px;
-    border-radius: 0% 80% 35% 80% / 0% 80% 35% 80%;
-    background: linear-gradient(135deg, rgba(235, 176, 208, 0.85) 0%, rgba(203, 180, 212, 0.9) 60%, rgba(184, 155, 206, 0.75) 100%);
-    box-shadow: 
-        0 4px 10px rgba(0, 0, 0, 0.15),
-        inset 0 1px 2px rgba(255, 255, 255, 0.4);
-    opacity: 0.85;
-    animation: fallAndSway linear infinite;
+    top: -25px;
+    opacity: 0.88;
+    animation: confettiFall linear infinite;
     pointer-events: none;
     will-change: transform, opacity;
 }
 
-.petal.petal-variant-1 {
-    background: linear-gradient(135deg, #f4e3ed 0%, #d8c2e2 60%, #b89bce 100%);
-    border-radius: 80% 0% 80% 35% / 80% 0% 80% 35%;
-}
-
-.petal.petal-variant-2 {
-    background: linear-gradient(135deg, #e6d5f2 0%, #cbb4d4 50%, #a482b8 100%);
-    border-radius: 50% 50% 50% 0% / 50% 50% 50% 0%;
-}
-
-@keyframes fallAndSway {
+@keyframes confettiFall {
     0% {
-        top: -40px;
+        top: -25px;
         transform: translateX(0) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
         opacity: 0;
     }
     10% {
-        opacity: 0.9;
+        opacity: 0.95;
     }
     50% {
-        transform: translateX(45px) rotateX(180deg) rotateY(90deg) rotateZ(120deg);
+        transform: translateX(30px) rotateX(360deg) rotateY(180deg) rotateZ(180deg);
     }
     85% {
-        opacity: 0.8;
+        opacity: 0.9;
     }
     100% {
         top: 108vh;
-        transform: translateX(-35px) rotateX(360deg) rotateY(180deg) rotateZ(240deg);
+        transform: translateX(-25px) rotateX(720deg) rotateY(360deg) rotateZ(360deg);
         opacity: 0;
     }
 }
@@ -324,7 +302,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    overflow-y: auto;
 }
 
 /* ==========================================
@@ -361,10 +340,10 @@ h3 {
 
 p {
     font-size: 1.15rem;
-    line-height: 1.65;
+    line-height: 1.68;
     margin-bottom: 16px;
     color: var(--text-muted);
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .highlight-text {
@@ -641,14 +620,22 @@ button {
     50% { transform: scale(1.03); }
 }
 
-#confetti-container, #confetti-container-final {
-    position: absolute;
+#confetti-container, #confetti-container-final, #confetti-container-finale {
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     pointer-events: none;
-    z-index: 1;
+    z-index: 99999;
+    overflow: hidden;
+}
+
+.burst-confetti {
+    position: absolute;
+    pointer-events: none;
+    will-change: transform, opacity;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* ==========================================
@@ -710,11 +697,11 @@ button {
     line-height: 1.6;
     font-weight: 600;
 }
-.wishes-list .petal-icon {
+.wishes-list .confetti-icon {
     font-size: 1.25rem;
     flex-shrink: 0;
     transform: translateY(2px);
-    filter: drop-shadow(0 2px 4px rgba(203, 180, 212, 0.4));
+    filter: drop-shadow(0 2px 5px rgba(203, 180, 212, 0.5));
 }
 .paper-letter .signature {
     text-align: right;
@@ -746,9 +733,10 @@ button {
    ÉTAPE 9 : COLLECTION DE LETTRES
    ========================================== */
 .collection-card {
-    padding: 35px 24px;
+    padding: 32px 24px;
     max-height: calc(100vh - 30px);
     overflow-y: auto;
+    justify-content: flex-start !important;
 }
 .collection-subtitle {
     font-size: 1.15rem;
@@ -1099,21 +1087,64 @@ button {
         font-size: 1.6rem;
     }
 
-    /* Grille d'enveloppes (2 par ligne sur mobile) */
+    /* Optimisation spécifique de l'écran Collection sur mobile */
+    .collection-card {
+        padding: 24px 14px 20px 14px;
+        max-height: calc(100dvh - 24px);
+        justify-content: flex-start !important;
+    }
+    .collection-card h2 {
+        margin-top: 2px;
+        font-size: 1.45rem;
+    }
+    .collection-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 6px;
+    }
+    .collection-note {
+        font-size: 0.86rem;
+        margin-bottom: 14px;
+    }
+    .collection-progress {
+        margin-bottom: 16px;
+    }
+
+    /* Grille d'enveloppes (2 par ligne parfaites sur mobile) */
     .envelopes-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
     }
     .envelope-card {
-        padding: 14px 10px;
-        min-height: 125px;
+        padding: 12px 10px;
+        min-height: 118px;
+        border-radius: 12px;
+    }
+    .env-num {
+        font-size: 0.72rem;
     }
     .env-title {
-        font-size: 0.92rem;
-        margin: 8px 0 6px 0;
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.88rem;
+        font-weight: 600;
+        line-height: 1.3;
+        margin: 6px 0 4px 0;
+        color: #231f28;
     }
     .env-subtext {
         font-size: 0.72rem;
+        line-height: 1.25;
+    }
+    .envelope-card.locked {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px dashed rgba(255, 255, 255, 0.35);
+        color: #ede3f4;
+    }
+    .envelope-card.locked .env-title {
+        color: #ffffff;
+        font-weight: 500;
+    }
+    .envelope-card.locked .env-subtext {
+        color: #dcd4e4;
     }
 
     /* Modale de lecture mobile */

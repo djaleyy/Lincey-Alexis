@@ -33,7 +33,7 @@ const LETTRES = [
         titre: "Lettre 03 — Pour les petits détails",
         subtext: "Ce qui te rend unique",
         contenu: [
-            "Je ne sais pas pourquoi je remarque autant tes ongles, mais à ce stade je commence sérieusement à penser qu'ils ont leur propre fan club ! Toujours aussi soignés et parfaits.",
+            "J'ai toujours remarqué à quel point tes ongles sont soignés et parfaits !",
             "Mais au-delà de ça, ce sont tous ces petits détails, ton style, ta façon d'être, qui font qu'on s'attache à une personne et qu'elle devient intéressante et unique à nos yeux."
         ]
     },
@@ -373,12 +373,12 @@ function startSecretTransition() {
 
     setTimeout(() => {
         if (txt2) txt2.classList.remove('hidden');
-    }, 2200);
+    }, 900);
 
     setTimeout(() => {
         if (txt3) txt3.classList.remove('hidden');
         if (btnDiscover) btnDiscover.classList.remove('hidden');
-    }, 4200);
+    }, 1800);
 }
 
 // ==========================================
@@ -501,17 +501,17 @@ function startGrandFinale() {
 
     setTimeout(() => {
         if (msg2) msg2.classList.remove('hidden');
-    }, 2500);
+    }, 1000);
 
     setTimeout(() => {
         if (msg3) msg3.classList.remove('hidden');
         if (msg4) msg4.classList.remove('hidden');
         triggerConfetti('confetti-container-finale');
-    }, 4800);
+    }, 2000);
 
     setTimeout(() => {
         if (btnRestart) btnRestart.classList.remove('hidden');
-    }, 6500);
+    }, 2800);
 }
 
 // ==========================================
@@ -577,70 +577,101 @@ function startShortCountdown() {
 // EFFETS VISUELS (PARTICULES ET CONFETTIS NEUTRES)
 // ==========================================
 function createParticles() {
-    const container = document.getElementById('particles-container');
-    if (!container) return;
-    container.innerHTML = '';
-
-    const petalCount = 32;
-    const variants = ['', 'petal-variant-1', 'petal-variant-2'];
-
-    for (let i = 0; i < petalCount; i++) {
-        const petal = document.createElement('div');
-        petal.className = 'petal';
-
-        const variant = variants[Math.floor(Math.random() * variants.length)];
-        if (variant) petal.classList.add(variant);
-
-        // Dimensions réalistes de pétales
-        const width = Math.random() * 12 + 14; // 14px à 26px
-        const height = width * (Math.random() * 0.4 + 1.25); // ~18px à 35px
-
-        petal.style.width = `${width}px`;
-        petal.style.height = `${height}px`;
-
-        // Répartition sur la largeur
-        petal.style.left = `${Math.random() * 100}vw`;
-
-        // Durée et délai aléatoires pour un effet naturel et continu
-        const duration = Math.random() * 6 + 7; // 7s à 13s
-        const delay = Math.random() * 10; // 0s à 10s
-
-        petal.style.animationDuration = `${duration}s`;
-        petal.style.animationDelay = `${delay}s`;
-
-        container.appendChild(petal);
-    }
+    // Suppression des éléments tombants
 }
 
 function triggerConfetti(containerId = 'confetti-container') {
-    const container = document.getElementById(containerId);
+    let container = document.getElementById(containerId);
     if (!container) return;
     container.innerHTML = '';
-    
-    const colors = ['#cbb4d4', '#b89bce', '#ffffff', '#e6d5f2', '#d4af37'];
 
-    for (let i = 0; i < 70; i++) {
-        const confetti = document.createElement('div');
-        confetti.style.position = 'absolute';
-        
-        const size = Math.random() * 8 + 6;
-        confetti.style.width = `${size}px`;
-        confetti.style.height = `${size}px`;
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        confetti.style.top = `-20px`;
-        confetti.style.left = `${Math.random() * 100}%`;
-        
-        const duration = Math.random() * 3 + 2;
-        const delay = Math.random() * 1.5;
-        
-        confetti.style.transition = `top ${duration}s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform ${duration}s linear`;
-        
-        container.appendChild(confetti);
+    const colors = ['#ffd700', '#ff007f', '#a855f7', '#ff77a9', '#00f0ff', '#ffffff', '#d8c2e2', '#e6d5f2'];
+    const confettiCount = 145;
+    const pieces = [];
 
-        setTimeout(() => {
-            confetti.style.top = '120%';
-            confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
-        }, delay * 1000 + 50);
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight * 0.42;
+
+    for (let i = 0; i < confettiCount; i++) {
+        const el = document.createElement('div');
+        el.className = 'burst-confetti';
+
+        const size = Math.random() * 8 + 6; // 6px à 14px
+        const isCircle = Math.random() > 0.4;
+        const isRibbon = Math.random() > 0.7;
+
+        let w = size;
+        let h = isRibbon ? size * 2.4 : (isCircle ? size : size * 1.2);
+
+        el.style.width = `${w}px`;
+        el.style.height = `${h}px`;
+        el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        el.style.borderRadius = isCircle ? '50%' : '2px';
+        el.style.left = `${centerX}px`;
+        el.style.top = `${centerY}px`;
+
+        container.appendChild(el);
+
+        // Explosion à 360° avec impulsion vers le haut
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 22 + 12;
+
+        pieces.push({
+            el: el,
+            x: centerX,
+            y: centerY,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - (Math.random() * 10 + 7), // Tir vers le haut
+            rotX: Math.random() * 360,
+            rotY: Math.random() * 360,
+            rotZ: Math.random() * 360,
+            vRotX: (Math.random() - 0.5) * 22,
+            vRotY: (Math.random() - 0.5) * 22,
+            vRotZ: (Math.random() - 0.5) * 22,
+            opacity: 1,
+            gravity: 0.55 + Math.random() * 0.22,
+            drag: 0.95 + Math.random() * 0.02
+        });
     }
+
+    let startTime = null;
+    function animateConfetti(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+
+        let aliveCount = 0;
+
+        pieces.forEach(p => {
+            if (p.opacity <= 0) return;
+            aliveCount++;
+
+            p.vx *= p.drag;
+            p.vy *= p.drag;
+            p.vy += p.gravity;
+
+            p.x += p.vx;
+            p.y += p.vy;
+
+            p.rotX += p.vRotX;
+            p.rotY += p.vRotY;
+            p.rotZ += p.vRotZ;
+
+            if (elapsed > 2400) {
+                p.opacity -= 0.015;
+            }
+
+            if (p.opacity < 0) p.opacity = 0;
+
+            p.el.style.transform = `translate3d(${p.x - centerX}px, ${p.y - centerY}px, 0px) rotateX(${p.rotX}deg) rotateY(${p.rotY}deg) rotateZ(${p.rotZ}deg)`;
+            p.el.style.opacity = p.opacity;
+        });
+
+        if (aliveCount > 0 && elapsed < 5500) {
+            requestAnimationFrame(animateConfetti);
+        } else {
+            container.innerHTML = '';
+        }
+    }
+
+    requestAnimationFrame(animateConfetti);
 }
