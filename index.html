@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pour Fédora ❤️</title>
+    <!-- Chargement des typographies modernes et élégantes (avec police manuscrite pour la lettre) -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ÉCRAN DE PRELOADER INITIAL DE DÉMARRAGE -->
+    <div id="app-preloader" class="preloader-overlay">
+        <div class="preloader-content">
+            <div class="preloader-heart">❤️</div>
+            <h1 class="preloader-title">Pour Fédora…</h1>
+            <p class="preloader-subtitle" id="preloader-text">Chargement d'une douce surprise ✨</p>
+            <div class="preloader-bar-bg" id="preloader-bar-container">
+                <div id="preloader-bar-fill" class="preloader-bar-fill"></div>
+            </div>
+            <button id="btn-enter-app" class="btn-primary mt-4 hidden">Entrer ✨</button>
+        </div>
+    </div>
+
+    <!-- Arrière-plan animé avec de douces particules -->
+    <div id="particles-container"></div>
+
+    <!-- Contrôle Musique Flottant -->
+    <button id="music-toggle" class="music-toggle-btn" aria-label="Activer ou désactiver la musique">
+        <span id="music-icon" class="music-icon">🎵</span>
+        <span id="music-waves" class="music-waves hidden">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </span>
+    </button>
+
+    <!-- Balise Audio (JVKE - Golden Hour) -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="golden_hour.mp3" type="audio/mpeg">
+        <source src="https://archive.org/download/JVKEGoldenHour/golden%20hour.mp3" type="audio/mpeg">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <main class="app-container">
+        
+        <!-- ============================================== -->
+        <!-- ÉCRAN 1 : INTRODUCTION                         -->
+        <!-- ============================================== -->
+        <section id="screen-intro" class="screen">
+            <div class="glass-card">
+                <h1>Fédora… j'ai préparé quelque chose pour toi. ❤️</h1>
+                <button id="btn-start" class="btn-primary">Ouvrir 🎁</button>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN 2 : PETITE PROVOCATION                   -->
+        <!-- ============================================== -->
+        <section id="screen-provocation" class="screen">
+            <div class="glass-card">
+                <h2>Petite question…</h2>
+                <p>Est-ce que tu es prête à voir quelque chose que j'ai fait juste pour toi ?</p>
+                <div class="button-group">
+                    <button id="btn-yes" class="btn-primary">Évidemment 😌</button>
+                    <button id="btn-no" class="btn-secondary">Non</button>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN : FAUX CHARGEMENT                        -->
+        <!-- ============================================== -->
+        <section id="screen-loading" class="screen">
+            <div class="glass-card terminal-card">
+                <div class="terminal-header">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                </div>
+                <div class="terminal-body" id="terminal-text">
+                    <!-- Rempli par le JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN : GALERIE POLAROIDS                      -->
+        <!-- ============================================== -->
+        <section id="screen-polaroids" class="screen">
+            <div class="glass-card polaroid-container">
+                <div class="polaroid-grid">
+                    <!-- Photo 1 -->
+                    <div class="polaroid" style="--rotation: -5deg;">
+                        <img src="images/MelMaxPhotography1_16.JPG" alt="Fédora" class="polaroid-img">
+                    </div>
+                    <!-- Photo 2 -->
+                    <div class="polaroid" style="--rotation: 3deg;">
+                        <img src="images/MelMaxPhotography1_26.JPG" alt="Fédora" class="polaroid-img">
+                    </div>
+                    <!-- Photo 3 -->
+                    <div class="polaroid" style="--rotation: -2deg;">
+                        <img src="images/MelMaxPhotography1_27.JPG" alt="Fédora" class="polaroid-img">
+                    </div>
+                    <!-- Photo 4 -->
+                    <div class="polaroid" style="--rotation: 4deg;">
+                        <img src="images/MelMaxPhotography1_32.JPG" alt="Fédora" class="polaroid-img">
+                    </div>
+                    <!-- Photo 5 -->
+                    <div class="polaroid" style="--rotation: -3deg;">
+                        <img src="images/MelMaxPhotography1_4.JPG" alt="Fédora" class="polaroid-img">
+                    </div>
+                    <!-- Photo 6 -->
+                    <div class="polaroid" style="--rotation: 5deg;">
+                        <img src="images/MelMaxPhotography1_18.JPG" alt="Fédora" class="polaroid-img">
+                    </div>
+                </div>
+                <button id="btn-to-sincere" class="btn-primary mt-4">Poursuivre ✨</button>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN 4 : MOMENT SINCÈRE                       -->
+        <!-- ============================================== -->
+        <section id="screen-sincere" class="screen">
+            <div class="glass-card">
+                <h2>Un petit moment de douceur… ❤️</h2>
+                <div class="sincere-text">
+                    <p>
+                        Je voulais juste prendre un moment pour te dire à quel point j'apprécie qu'on se parle. Tu as vraiment cette capacité à rendre mes journées plus intéressantes et plus lumineuses.
+                    </p>
+                    <p>
+                        Même si on passe notre temps à se disputer et à se chicaner pour un rien... au fond, on finit toujours par s'entendre. Et c'est vraiment la personne que tu es, ton énergie et ta présence qui comptent le plus pour moi.
+                    </p>
+                </div>
+                <button id="btn-to-countdown" class="btn-primary mt-4">La suite 🌟</button>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN 5 : COMPTE À REBOURS COURT               -->
+        <!-- ============================================== -->
+        <section id="screen-countdown" class="screen">
+            <div class="glass-card">
+                <h2>Prête ? 👀</h2>
+                <div class="short-countdown">
+                    <span id="short-cd-number">3</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN 6 : LE JOUR J (ANNIVERSAIRE)             -->
+        <!-- ============================================== -->
+        <section id="screen-birthday" class="screen">
+            <div class="glass-card birthday-card">
+                <div id="confetti-container"></div>
+                <h1 class="birthday-title">JOYEUX ANNIVERSAIRE<br>FÉDORA ❤️</h1>
+                <p class="birthday-subtitle">Demain, c'est officiellement ta journée ! ✨</p>
+                <button id="btn-to-final" class="btn-primary mt-4">J'ai encore une chose à te dire 💌</button>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN 7 : MESSAGE FINAL                        -->
+        <!-- ============================================== -->
+        <section id="screen-final" class="screen">
+            <div class="paper-letter">
+                <div id="confetti-container-final"></div>
+                <h3>Chère Fédora,</h3>
+                <p>
+                    Je ne sais pas toujours trouver les bons mots au bon moment, mais comme demain c'est ton anniversaire, je me dois de faire cet effort. Et tu le mérites tellement.
+                </p>
+                <p>
+                    Je voulais juste te dire que je suis vraiment content de te connaître. Pas juste content comme ça, en passant — vraiment content. Le genre de content où tu te rends compte que certaines personnes rentrent dans ta vie et la rendent automatiquement meilleure, sans même vraiment essayer.
+                </p>
+                <p>
+                    Tu es jolie, ça c'est un fait (et tes yeux ont clairement un avantage injuste sur le reste du monde). Tu es gentille, attentionnée, et tu as cette façon d'être qui est à la fois douce et forte à la fois. Et franchement ? C'est rare.
+                </p>
+                <p>
+                    Pour cette nouvelle année de ta vie qui commence demain, je te souhaite de tout mon cœur :
+                </p>
+                <ul class="wishes-list">
+                    <li><span class="petal-icon">🌸</span> Que chaque journée t'apporte quelque chose qui te fait sourire.</li>
+                    <li><span class="petal-icon">🌸</span> Que tes projets avancent exactement comme tu le rêves.</li>
+                    <li><span class="petal-icon">🌸</span> Que tu continues d'être la personne forte et lumineuse que tu es.</li>
+                    <li><span class="petal-icon">🌸</span> Et que tu sois entourée de personnes qui te méritent vraiment.</li>
+                </ul>
+                <p class="signature">
+                    Joyeux anniversaire, Fédora.
+                </p>
+                <button id="btn-to-secret-transition" class="btn-primary mt-4">Terminer ❤️</button>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN : TRANSITION SECRÈTE                      -->
+        <!-- ============================================== -->
+        <section id="screen-secret-transition" class="screen">
+            <div class="glass-card secret-transition-card">
+                <p id="secret-text-1" class="secret-msg">« Voilà… j'ai enfin terminé. ❤️ »</p>
+                <p id="secret-text-2" class="secret-msg hidden">« …enfin, c'est ce que tu crois. 👀 »</p>
+                <p id="secret-text-3" class="secret-msg hidden">J'ai encore quelque chose pour toi.</p>
+                <button id="btn-discover-collection" class="btn-primary mt-4 hidden">Découvrir ❤️</button>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN : COLLECTION DE LETTRES (ÉTAPE 9)        -->
+        <!-- ============================================== -->
+        <section id="screen-collection" class="screen">
+            <div class="glass-card collection-card">
+                <h2>Quelques lettres pour toi 💌</h2>
+                <p class="collection-subtitle">Je n'ai pas réussi à tout mettre dans une seule lettre… alors j'en ai écrit plusieurs.</p>
+                <p class="collection-note">Prends ton temps. Tu n'es pas obligée de toutes les lire d'un coup. ✨</p>
+                
+                <div class="collection-progress">
+                    <span id="collection-counter">0 / 7 lettres découvertes</span>
+                    <div class="progress-bar-bg"><div id="progress-bar-fill"></div></div>
+                </div>
+
+                <div class="unlock-toast hidden" id="unlock-toast">
+                    ✨ Tu as presque terminé… La septième lettre s'est débloquée !
+                </div>
+
+                <div class="envelopes-grid" id="envelopes-grid">
+                    <!-- Généré dynamiquement par le JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN : GRAND FINALE                            -->
+        <!-- ============================================== -->
+        <section id="screen-grand-finale" class="screen">
+            <div class="glass-card finale-card">
+                <div id="confetti-container-finale"></div>
+                <div class="finale-messages">
+                    <p id="finale-msg-1" class="finale-text">« Bon… maintenant j'ai vraiment tout dit. »</p>
+                    <p id="finale-msg-2" class="finale-text hidden">« Enfin… presque. 😌 »</p>
+                    <p id="finale-msg-3" class="finale-text hidden">J'espère surtout que cette petite surprise t'aura fait sourire.</p>
+                    <h1 id="finale-msg-4" class="birthday-title hidden mt-3">Joyeux anniversaire encore une fois, Fédora. ❤️</h1>
+                </div>
+                <button id="btn-restart-experience" class="btn-primary mt-4 hidden">Recommencer l'expérience 🔄</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL DE LECTURE D'UNE LETTRE -->
+    <div id="letter-modal" class="letter-modal hidden">
+        <div class="letter-modal-backdrop"></div>
+        <div class="letter-modal-content">
+            <div class="paper-letter-opened">
+                <span class="letter-badge" id="modal-letter-num">Lettre 01</span>
+                <h3 id="modal-letter-title">Titre de la lettre</h3>
+                <div class="letter-body-text" id="modal-letter-body">
+                    <!-- Contenu injecté par JS -->
+                </div>
+                <button id="btn-close-letter" class="btn-primary mt-4">Fermer la lettre</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
