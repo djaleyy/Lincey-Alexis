@@ -199,71 +199,8 @@ function runPreloader() {
 let isMusicPlaying = false;
 
 function initMusicControl() {
-    const bgMusic = document.getElementById('bg-music');
-    const musicToggle = document.getElementById('music-toggle');
-    const musicIcon = document.getElementById('music-icon');
-    const musicWaves = document.getElementById('music-waves');
-
-    if (!bgMusic || !musicToggle) return;
-
-    bgMusic.volume = 0.35; // Volume de fond doux
-
-    function updateMusicUI(playing) {
-        isMusicPlaying = playing;
-        if (playing) {
-            musicToggle.classList.add('playing');
-            if (musicIcon) musicIcon.classList.add('hidden');
-            if (musicWaves) musicWaves.classList.remove('hidden');
-        } else {
-            musicToggle.classList.remove('playing');
-            if (musicIcon) musicIcon.classList.remove('hidden');
-            if (musicWaves) musicWaves.classList.add('hidden');
-        }
-    }
-
-    function playMusic() {
-        return bgMusic.play().then(() => {
-            updateMusicUI(true);
-        }).catch(err => {
-            console.log("Autoplay restreint par le navigateur — attente du premier clic.", err);
-            updateMusicUI(false);
-        });
-    }
-
-    function pauseMusic() {
-        bgMusic.pause();
-        updateMusicUI(false);
-    }
-
-    function toggleMusic() {
-        if (bgMusic.paused) {
-            playMusic();
-        } else {
-            pauseMusic();
-        }
-    }
-
-    window.attemptAutoPlayMusic = playMusic;
-
-    musicToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleMusic();
-    });
-
-    // Tenter immédiatement la lecture dès le démarrage
-    playMusic();
-
-    // Déclencheur universel instantané au premier clic/toucher n'importe où
-    const userInteractionEvents = ['click', 'touchstart', 'pointerdown', 'keydown'];
-    const triggerAudioOnInteraction = () => {
-        if (bgMusic.paused) {
-            playMusic();
-        }
-    };
-
-    userInteractionEvents.forEach(evt => {
-        document.addEventListener(evt, triggerAudioOnInteraction);
-    });
+    window.attemptAutoPlayMusic = function() {};
+    return;
 }
 
 // ==========================================
