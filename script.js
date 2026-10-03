@@ -194,13 +194,131 @@ function runPreloader() {
 }
 
 // ==========================================
-// GESTION DE LA MUSIQUE D'AMBIANCE AUTOMATIQUE
+// GESTION DE LA MUSIQUE D'AMBIANCE AUTOMATIQUE (YOUTUBE API - Ordinary par Alex Warren)
 // ==========================================
+let ytPlayer = null;
+let isYtReady = false;
 let isMusicPlaying = false;
 
+// Callback globale appelée automatiquement par l'API IFrame YouTube
+window.onYouTubeIframeAPIReady = function() {
+    ytPlayer = new YT.Player('youtube-player', {
+        height: '1',
+        width: '1',
+        videoId: 'u2ah9tWTkmk', // Alex Warren - Ordinary
+        playerVars: {
+            'autoplay': 1,
+            'controls': 0,
+            'loop': 1,
+            'playlist': 'u2ah9tWTkmk',
+            'playsinline': 1
+        },
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+};
+
+function onPlayerReady(event) {
+    isYtReady = true;
+    event.target.setVolume(50); // Volume doux à 50%
+}
+
+function updateMusicUI(playing) {
+    isMusicPlaying = playing;
+    const musicToggle = document.getElementById('music-toggle');
+    const musicIcon = document.getElementById('music-icon');
+    const musicWaves = document.getElementById('music-waves');
+
+    if (playing) {
+        if (musicToggle) musicToggle.classList.add('playing');
+        if (musicIcon) musicIcon.classList.add('hidden');
+        if (musicWaves) musicWaves.classList.remove('hidden');
+    } else {
+        if (musicToggle) musicToggle.classList.remove('playing');
+        if (musicIcon) musicIcon.classList.remove('hidden');
+        if (musicWaves) musicWaves.classList.add('hidden');
+    }
+}
+
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+        updateMusicUI(true);
+    } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+        updateMusicUI(false);
+    }
+}
+
+function playMusic() {
+    const bgAudio = document.getElementById('bg-music');
+    let playedLocal = false;
+
+    if (bgAudio && bgAudio.getAttribute('src')) {
+        bgAudio.volume = 0.4;
+        bgAudio.play().then(() => {
+            playedLocal = true;
+            updateMusicUI(true);
+        }).catch(err => {
+            // Si l'audio local échoue ou n'est pas encore téléchargé, utiliser YouTube
+            if (ytPlayer && isYtReady && typeof ytPlayer.playVideo === 'function') {
+                try {
+                    ytPlayer.playVideo();
+                } catch (e) {}
+            }
+        });
+    }
+
+    if (!playedLocal && ytPlayer && isYtReady && typeof ytPlayer.playVideo === 'function') {
+        try {
+            ytPlayer.playVideo();
+        } catch (e) {
+            console.log("Lecture YouTube restreinte par le navigateur", e);
+        }
+    }
+}
+
+function pauseMusic() {
+    const bgAudio = document.getElementById('bg-music');
+    if (bgAudio) {
+        try { bgAudio.pause(); } catch(e) {}
+    }
+    if (ytPlayer && isYtReady && typeof ytPlayer.pauseVideo === 'function') {
+        try {
+            ytPlayer.pauseVideo();
+        } catch (e) {}
+    }
+    updateMusicUI(false);
+}
+
+function toggleMusic() {
+    if (isMusicPlaying) {
+        pauseMusic();
+    } else {
+        playMusic();
+    }
+}
+
 function initMusicControl() {
-    window.attemptAutoPlayMusic = function() {};
-    return;
+    const musicToggle = document.getElementById('music-toggle');
+
+    window.attemptAutoPlayMusic = playMusic;
+
+    if (musicToggle) {
+        musicToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMusic();
+        });
+    }
+
+    // Déclencheurs automatiques au premier clic utilisateur
+    const userEvents = ['click', 'touchstart', 'pointerdown'];
+    const triggerAudio = () => {
+        if (!isMusicPlaying) {
+            playMusic();
+        }
+    };
+    userEvents.forEach(evt => document.addEventListener(evt, triggerAudio, { once: true }));
 }
 
 // ==========================================

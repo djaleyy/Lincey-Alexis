@@ -25,7 +25,23 @@
     <!-- Arrière-plan animé avec de douces particules -->
     <div id="particles-container"></div>
 
-    <main class="app-container">
+    <!-- Contrôle Musique Flottant -->
+    <button id="music-toggle" class="music-toggle-btn" aria-label="Activer ou désactiver la musique (Alex Warren - Ordinary)">
+        <span id="music-icon" class="music-icon">🎵</span>
+        <span id="music-waves" class="music-waves hidden">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </span>
+    </button>
+
+    <!-- Lecteur YouTube Arrière-plan (Alex Warren - Ordinary) -->
+    <div id="youtube-player-container" style="position: fixed; width: 1px; height: 1px; top: -100px; left: -100px; opacity: 0; pointer-events: none; overflow: hidden; z-index: -999;">
+        <div id="youtube-player"></div>
+    </div>
+
+    <!-- Lecteur Audio HTML5 local fallback -->
+    <audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
         
         <!-- ============================================== -->
         <!-- ÉCRAN 1 : INTRODUCTION                         -->
@@ -247,6 +263,7 @@
         </div>
     </div>
 
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="script.js"></script>
 </body>
 </html>
