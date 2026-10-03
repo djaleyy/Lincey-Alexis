@@ -207,63 +207,53 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- ÉCRAN : COLLECTION DE LETTRES (ÉTAPE 9)        -->
+        <!-- ÉCRAN : PROPOSITION "WILL YOU BE MY GIRLFRIEND" -->
         <!-- ============================================== -->
-        <section id="screen-collection" class="screen">
-            <div class="glass-card collection-card">
-                <h2>Quelques lettres pour toi</h2>
-                <p class="collection-subtitle">Je n'ai pas réussi à tout mettre dans une seule lettre… alors j'en ai écrit plusieurs.</p>
-                <p class="collection-note">Prends ton temps. Tu n'es pas obligée de toutes les lire d'un coup. ✨</p>
+        <section id="screen-proposal" class="screen">
+            <div class="glass-card proposal-card">
+                <div class="proposal-heart-badge">💖</div>
                 
-                <div class="collection-progress">
-                    <span id="collection-counter">0 / 7 lettres découvertes</span>
-                    <div class="progress-bar-bg"><div id="progress-bar-fill"></div></div>
-                </div>
+                <!-- Petit texte d'introduction -->
+                <p class="proposal-subtitle">
+                    Pendant tout ce temps à discuter avec toi, j'ai compris à quel point tu es spéciale pour moi. 
+                    Aujourd'hui, je voulais faire un geste mémorable et te poser cette question…
+                </p>
 
-                <div class="unlock-toast hidden" id="unlock-toast">
-                    ✨ Tu as presque terminé… La septième lettre s'est débloquée !
-                </div>
+                <!-- La question EN DESSOUS du petit texte -->
+                <h1 class="proposal-title">
+                    <span class="proposal-highlight">Will you be my girlfriend ?</span> ❤️
+                </h1>
 
-                <div class="envelopes-grid" id="envelopes-grid">
-                    <!-- Généré dynamiquement par le JS -->
+                <!-- Bouton pour répondre par message -->
+                <div class="proposal-buttons mt-4">
+                    <button id="btn-accept-whatsapp" class="btn-primary btn-proposal btn-wa">
+                        <span class="btn-icon">💬</span> Me répondre sur WhatsApp
+                    </button>
+                    <button id="btn-accept-sms" class="btn-secondary btn-proposal btn-sms">
+                        <span class="btn-icon">📱</span> Me répondre par SMS
+                    </button>
                 </div>
             </div>
         </section>
 
         <!-- ============================================== -->
-        <!-- ÉCRAN : GRAND FINALE                            -->
+        <!-- ÉCRAN : CELEBRATION DE CONFIRMATION             -->
         <!-- ============================================== -->
         <section id="screen-grand-finale" class="screen">
             <div class="glass-card finale-card">
                 <div id="confetti-container-finale"></div>
                 <div class="finale-messages">
-                    <p id="finale-msg-1" class="finale-text">« Bon… maintenant j'ai vraiment tout dit. »</p>
-                    <p id="finale-msg-2" class="finale-text hidden">« Enfin… presque. 😌 »</p>
-                    <p id="finale-msg-3" class="finale-text hidden">J'espère surtout que cette petite surprise t'aura fait sourire.</p>
-                    <h1 id="finale-msg-4" class="birthday-title hidden mt-3">Joyeux anniversaire encore une fois, Fédora. ❤️</h1>
+                    <div class="finale-heart-icon">💖✨</div>
+                    <h1 class="birthday-title mt-2">C'est le début d'une magnifique histoire… ❤️</h1>
+                    <p id="finale-msg-3" class="finale-text">Merci d'être toi, Fédora. Ton message est prêt à m'être envoyé !</p>
                 </div>
-                <button id="btn-restart-experience" class="btn-primary mt-4 hidden">Recommencer l'expérience 🔄</button>
+                <button id="btn-restart-experience" class="btn-primary mt-4">Recommencer l'expérience 🔄</button>
             </div>
         </section>
 
     </main>
 
-    <!-- MODAL DE LECTURE D'UNE LETTRE -->
-    <div id="letter-modal" class="letter-modal hidden">
-        <div class="letter-modal-backdrop"></div>
-        <div class="letter-modal-content">
-            <div class="paper-letter-opened">
-                <span class="letter-badge" id="modal-letter-num">Lettre 01</span>
-                <h3 id="modal-letter-title">Titre de la lettre</h3>
-                <div class="letter-body-text" id="modal-letter-body">
-                    <!-- Contenu injecté par JS -->
-                </div>
-                <button id="btn-close-letter" class="btn-primary mt-4">Fermer la lettre</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="script.js"></script>
+    <script src="https://www.youtube.com/iframe_api" async></script>
 </body>
 </html>

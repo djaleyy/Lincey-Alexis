@@ -101,7 +101,7 @@ function initScreens() {
         birthday: document.getElementById('screen-birthday'),
         final: document.getElementById('screen-final'),
         secretTransition: document.getElementById('screen-secret-transition'),
-        collection: document.getElementById('screen-collection'),
+        proposal: document.getElementById('screen-proposal'),
         grandFinale: document.getElementById('screen-grand-finale')
     };
 }
@@ -137,6 +137,7 @@ window.addEventListener('DOMContentLoaded', () => {
     createParticles();
     initEventListeners();
     initMusicControl();
+    initYouTubePlayer();
     runPreloader();
 });
 
@@ -184,10 +185,6 @@ function runPreloader() {
             setTimeout(() => {
                 if (preloaderText) preloaderText.innerText = "Tout est prêt pour toi ✨";
                 if (btnEnter) btnEnter.classList.remove('hidden');
-                // Tenter le lancement auto
-                if (window.attemptAutoPlayMusic) {
-                    window.attemptAutoPlayMusic();
-                }
             }, 250);
         }
     }, 110);
@@ -200,29 +197,41 @@ let ytPlayer = null;
 let isYtReady = false;
 let isMusicPlaying = false;
 
-// Callback globale appelée automatiquement par l'API IFrame YouTube
-window.onYouTubeIframeAPIReady = function() {
-    ytPlayer = new YT.Player('youtube-player', {
-        height: '1',
-        width: '1',
-        videoId: 'u2ah9tWTkmk', // Alex Warren - Ordinary
-        playerVars: {
-            'autoplay': 1,
-            'controls': 0,
-            'loop': 1,
-            'playlist': 'u2ah9tWTkmk',
-            'playsinline': 1
-        },
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
-    });
-};
+function initYouTubePlayer() {
+    function createPlayer() {
+        if (ytPlayer || !window.YT || !window.YT.Player) return;
+        ytPlayer = new YT.Player('youtube-player', {
+            height: '1',
+            width: '1',
+            videoId: 'u2ah9tWTkmk', // Alex Warren - Ordinary
+            playerVars: {
+                'autoplay': 1,
+                'controls': 0,
+                'loop': 1,
+                'playlist': 'u2ah9tWTkmk',
+                'playsinline': 1
+            },
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    window.onYouTubeIframeAPIReady = function() {
+        createPlayer();
+    };
+
+    if (window.YT && window.YT.Player) {
+        createPlayer();
+    }
+}
 
 function onPlayerReady(event) {
     isYtReady = true;
-    event.target.setVolume(50); // Volume doux à 50%
+    try {
+        event.target.setVolume(60);
+    } catch(e) {}
 }
 
 function updateMusicUI(playing) {
@@ -243,9 +252,9 @@ function updateMusicUI(playing) {
 }
 
 function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.PLAYING) {
+    if (window.YT && event.data === YT.PlayerState.PLAYING) {
         updateMusicUI(true);
-    } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+    } else if (window.YT && (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED)) {
         updateMusicUI(false);
     }
 }
@@ -254,26 +263,26 @@ function playMusic() {
     const bgAudio = document.getElementById('bg-music');
     let playedLocal = false;
 
-    if (bgAudio && bgAudio.getAttribute('src')) {
-        bgAudio.volume = 0.4;
+    if (bgAudio && bgAudio.src && bgAudio.duration > 0 && !isNaN(bgAudio.duration)) {
+        bgAudio.volume = 0.5;
         bgAudio.play().then(() => {
             playedLocal = true;
             updateMusicUI(true);
-        }).catch(err => {
-            // Si l'audio local échoue ou n'est pas encore téléchargé, utiliser YouTube
-            if (ytPlayer && isYtReady && typeof ytPlayer.playVideo === 'function') {
-                try {
-                    ytPlayer.playVideo();
-                } catch (e) {}
-            }
+        }).catch(() => {
+            attemptYouTubePlay();
         });
+    } else {
+        attemptYouTubePlay();
     }
+}
 
-    if (!playedLocal && ytPlayer && isYtReady && typeof ytPlayer.playVideo === 'function') {
+function attemptYouTubePlay() {
+    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
         try {
             ytPlayer.playVideo();
+            updateMusicUI(true);
         } catch (e) {
-            console.log("Lecture YouTube restreinte par le navigateur", e);
+            console.log("Lecture YouTube en attente d'interaction utilisateur", e);
         }
     }
 }
@@ -283,7 +292,7 @@ function pauseMusic() {
     if (bgAudio) {
         try { bgAudio.pause(); } catch(e) {}
     }
-    if (ytPlayer && isYtReady && typeof ytPlayer.pauseVideo === 'function') {
+    if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
         try {
             ytPlayer.pauseVideo();
         } catch (e) {}
@@ -311,7 +320,7 @@ function initMusicControl() {
         });
     }
 
-    // Déclencheurs automatiques au premier clic utilisateur
+    // Déclencheurs automatiques aux interactions utilisateur pour débloquer l'audio navigateur
     const userEvents = ['click', 'touchstart', 'pointerdown'];
     const triggerAudio = () => {
         if (!isMusicPlaying) {
@@ -382,20 +391,74 @@ function initEventListeners() {
         });
     }
 
-    // Bouton Découvrir -> Écran Collection de Lettres
+    // Bouton Découvrir -> Écran Proposition "Will you be my girlfriend ?"
     const btnDiscoverCollection = document.getElementById('btn-discover-collection');
     if (btnDiscoverCollection) {
         btnDiscoverCollection.addEventListener('click', () => {
-            showScreen(screens.collection);
-            renderCollectionGrid();
+            showScreen(screens.proposal);
+            triggerConfetti('confetti-container');
         });
     }
 
-    // Bouton Fermer la lettre
-    const btnCloseLetter = document.getElementById('btn-close-letter');
-    if (btnCloseLetter) {
-        btnCloseLetter.addEventListener('click', () => {
-            closeLetterModal();
+    // Interactions Badges de réponse rapide
+    const badgeOptions = document.querySelectorAll('.badge-option');
+    const customTextarea = document.getElementById('proposal-custom-note');
+
+    badgeOptions.forEach(badge => {
+        badge.addEventListener('click', () => {
+            badgeOptions.forEach(b => b.classList.remove('active'));
+            badge.classList.add('active');
+            const msg = badge.getAttribute('data-msg');
+            if (customTextarea && msg) {
+                customTextarea.value = msg;
+            }
+        });
+    });
+
+    // Action Bouton WhatsApp
+    const btnWa = document.getElementById('btn-accept-whatsapp');
+    if (btnWa) {
+        btnWa.addEventListener('click', () => {
+            const message = customTextarea ? customTextarea.value.trim() : "Oui ! Je veux bien être ta petite amie ! ❤️✨";
+            const encoded = encodeURIComponent(message);
+            window.open(`https://wa.me/?text=${encoded}`, '_blank');
+            startGrandFinale();
+        });
+    }
+
+    // Action Bouton SMS
+    const btnSms = document.getElementById('btn-accept-sms');
+    if (btnSms) {
+        btnSms.addEventListener('click', () => {
+            const message = customTextarea ? customTextarea.value.trim() : "Oui ! Je veux bien être ta petite amie ! ❤️✨";
+            const encoded = encodeURIComponent(message);
+            window.location.href = `sms:?body=${encoded}`;
+            startGrandFinale();
+        });
+    }
+
+    // Action Bouton Copier
+    const btnCopy = document.getElementById('btn-copy-msg');
+    const toast = document.getElementById('proposal-toast');
+
+    if (btnCopy) {
+        btnCopy.addEventListener('click', () => {
+            const message = customTextarea ? customTextarea.value.trim() : "Oui ! Je veux bien être ta petite amie ! ❤️✨";
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(message);
+            } else {
+                if (customTextarea) {
+                    customTextarea.select();
+                    document.execCommand('copy');
+                }
+            }
+            if (toast) {
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 3500);
+            }
+            setTimeout(() => {
+                startGrandFinale();
+            }, 1200);
         });
     }
 
@@ -403,15 +466,13 @@ function initEventListeners() {
     const btnRestartExperience = document.getElementById('btn-restart-experience');
     if (btnRestartExperience) {
         btnRestartExperience.addEventListener('click', () => {
-            openedLettersSet.clear();
-            unlockedMaxId = 1;
             showScreen(screens.intro);
         });
     }
 }
 
 // ==========================================
-// TRANSITION SECRÈTE (ÉTAPE 9)
+// TRANSITION SECRÈTE (POURSUTIE VERS PROPOSITION)
 // ==========================================
 function startSecretTransition() {
     showScreen(screens.secretTransition);
@@ -426,6 +487,9 @@ function startSecretTransition() {
     if (txt3) txt3.classList.add('hidden');
     if (btnDiscover) btnDiscover.classList.add('hidden');
 
+    if (txt3) txt3.innerText = "J'ai encore la plus importante des questions pour toi… ❤️";
+    if (btnDiscover) btnDiscover.innerText = "Découvrir la question ❤️";
+
     setTimeout(() => {
         if (txt2) txt2.classList.remove('hidden');
     }, 900);
@@ -437,136 +501,11 @@ function startSecretTransition() {
 }
 
 // ==========================================
-// AFFICHAGE ET GESTION DE LA COLLECTION DE LETTRES
-// ==========================================
-function renderCollectionGrid() {
-    const grid = document.getElementById('envelopes-grid');
-    const counter = document.getElementById('collection-counter');
-    const progressFill = document.getElementById('progress-bar-fill');
-    if (!grid) return;
-
-    grid.innerHTML = '';
-
-    const countRead = openedLettersSet.size;
-    if (counter) counter.innerText = `${countRead} / 7 lettres découvertes`;
-    if (progressFill) progressFill.style.width = `${(countRead / 7) * 100}%`;
-
-    LETTRES.forEach(letter => {
-        const isLocked = letter.id > unlockedMaxId;
-        const isRead = openedLettersSet.has(letter.id);
-
-        const card = document.createElement('div');
-        card.className = `envelope-card ${isLocked ? 'locked' : (isRead ? 'read' : 'unlocked')}`;
-
-        let statusIcon = '✉️';
-        if (isLocked) statusIcon = '🔒';
-        else if (isRead) statusIcon = '📖';
-
-        card.innerHTML = `
-            <div class="envelope-header">
-                <span class="env-num">LETTRE ${letter.numero}</span>
-                <span class="env-status">${statusIcon}</span>
-            </div>
-            <div class="env-title">${isLocked ? 'Lettre ' + letter.numero : letter.titre}</div>
-            <div class="env-subtext">${isLocked ? '🔒 ' + letter.subtext : (isRead ? 'Déjà lue' : 'Cliquer pour ouvrir')}</div>
-        `;
-
-        if (!isLocked) {
-            card.addEventListener('click', () => {
-                openLetterModal(letter);
-            });
-        }
-
-        grid.appendChild(card);
-    });
-}
-
-function openLetterModal(letter) {
-    currentOpenLetter = letter;
-    const modal = document.getElementById('letter-modal');
-    const numSpan = document.getElementById('modal-letter-num');
-    const titleH3 = document.getElementById('modal-letter-title');
-    const bodyText = document.getElementById('modal-letter-body');
-
-    if (!modal) return;
-
-    if (numSpan) numSpan.innerText = `Lettre ${letter.numero}`;
-    if (titleH3) titleH3.innerText = letter.titre;
-
-    if (bodyText) {
-        bodyText.innerHTML = '';
-        letter.contenu.forEach(paragraph => {
-            const p = document.createElement('p');
-            p.innerText = paragraph;
-            bodyText.appendChild(p);
-        });
-    }
-
-    modal.classList.remove('hidden');
-}
-
-function closeLetterModal() {
-    const modal = document.getElementById('letter-modal');
-    if (modal) modal.classList.add('hidden');
-
-    if (currentOpenLetter) {
-        const letterId = currentOpenLetter.id;
-        openedLettersSet.add(letterId);
-
-        // Déverrouillage de la suivante
-        if (letterId < 7 && unlockedMaxId <= letterId) {
-            unlockedMaxId = letterId + 1;
-            if (unlockedMaxId === 7) {
-                const toast = document.getElementById('unlock-toast');
-                if (toast) {
-                    toast.classList.remove('hidden');
-                    setTimeout(() => toast.classList.add('hidden'), 4000);
-                }
-            }
-        }
-
-        renderCollectionGrid();
-
-        // Si c'est la 7ème lettre qu'on ferme -> Grand Finale !
-        if (letterId === 7) {
-            setTimeout(() => {
-                startGrandFinale();
-            }, 600);
-        }
-    }
-}
-
-// ==========================================
-// GRAND FINALE (APRÈS LA 7ÈME LETTRE)
+// GRAND FINALE (CÉLÉBRATION DE CONFIRMATION)
 // ==========================================
 function startGrandFinale() {
     showScreen(screens.grandFinale);
-
-    const msg1 = document.getElementById('finale-msg-1');
-    const msg2 = document.getElementById('finale-msg-2');
-    const msg3 = document.getElementById('finale-msg-3');
-    const msg4 = document.getElementById('finale-msg-4');
-    const btnRestart = document.getElementById('btn-restart-experience');
-
-    if (msg1) msg1.classList.remove('hidden');
-    if (msg2) msg2.classList.add('hidden');
-    if (msg3) msg3.classList.add('hidden');
-    if (msg4) msg4.classList.add('hidden');
-    if (btnRestart) btnRestart.classList.add('hidden');
-
-    setTimeout(() => {
-        if (msg2) msg2.classList.remove('hidden');
-    }, 1000);
-
-    setTimeout(() => {
-        if (msg3) msg3.classList.remove('hidden');
-        if (msg4) msg4.classList.remove('hidden');
-        triggerConfetti('confetti-container-finale');
-    }, 2000);
-
-    setTimeout(() => {
-        if (btnRestart) btnRestart.classList.remove('hidden');
-    }, 2800);
+    triggerConfetti('confetti-container-finale');
 }
 
 // ==========================================
