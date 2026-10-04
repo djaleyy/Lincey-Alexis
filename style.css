@@ -799,21 +799,50 @@ p {
 }
 
 /* --------------------------------------------------------------------------
-   14. ADAPTATION MOBILE ET RESPONSIVE (MEDIA QUERIES)
+   14. ADAPTATION MOBILE ET RESPONSIVE (MEDIA QUERIES - VERSION LUMINEUSE)
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
   body {
-    padding: 15px 10px;
+    padding: 15px 12px;
+    background-image: radial-gradient(circle at 50% 15%, #FFF8FA 0%, #FDF0F4 50%, #F7E5EE 100%);
   }
 
   .glass-card {
-    padding: 28px 20px;
+    padding: 30px 22px;
     border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.90);
+    border-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 12px 32px rgba(216, 27, 96, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
   }
 
   .paper-letter, .paper-letter-opened {
-    padding: 30px 20px;
+    padding: 32px 22px;
     border-radius: var(--radius-md);
+    background: #FFFFFF;
+    box-shadow: 0 12px 30px rgba(180, 140, 160, 0.14);
+  }
+
+  p {
+    color: #382C36;
+    font-size: 1.05rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    background: linear-gradient(135deg, #222222 0%, #D81B60 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  h2 {
+    color: #2D1F29;
+    font-size: 1.6rem;
+  }
+
+  .terminal-card {
+    background: rgba(45, 28, 38, 0.96);
+    color: #FFE4EC;
+    border-color: var(--primary-rose);
   }
 
   .polaroid-grid {
@@ -824,15 +853,17 @@ p {
   .polaroid {
     padding: 8px 8px 16px 8px;
     max-width: 100%;
+    background: #FFFFFF;
   }
 
   .polaroid-img {
-    height: 170px;
+    height: 180px;
   }
 
   .btn-primary, .btn-secondary {
     width: 100%;
-    padding: 14px 20px;
+    padding: 15px 22px;
+    font-size: 1.02rem;
   }
 
   .button-group {
@@ -843,14 +874,14 @@ p {
 
 @media (max-width: 480px) {
   h1 {
-    font-size: 1.8rem;
+    font-size: 1.85rem;
   }
 
   h2 {
-    font-size: 1.4rem;
+    font-size: 1.45rem;
   }
 
   .preloader-content {
-    padding: 20px;
+    padding: 24px 16px;
   }
 }
