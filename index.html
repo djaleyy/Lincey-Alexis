@@ -26,7 +26,7 @@
     <div id="particles-container"></div>
 
     <!-- Contrôle Musique Flottant -->
-    <button id="music-toggle" class="music-toggle-btn" aria-label="Activer ou désactiver la musique (Alex Warren - Ordinary)">
+    <button id="music-toggle" class="music-toggle-btn" aria-label="Activer ou désactiver la musique (Adele - Lovesong)">
         <span id="music-icon" class="music-icon">🎵</span>
         <span id="music-waves" class="music-waves hidden">
             <span class="bar"></span>
@@ -35,7 +35,7 @@
         </span>
     </button>
 
-    <!-- Lecteur YouTube Arrière-plan (Alex Warren - Ordinary) -->
+    <!-- Lecteur YouTube Arrière-plan (Adele - Lovesong) -->
     <div id="youtube-player-container" style="position: fixed; width: 1px; height: 1px; top: -100px; left: -100px; opacity: 0; pointer-events: none; overflow: hidden; z-index: -999;">
         <div id="youtube-player"></div>
     </div>
@@ -211,6 +211,7 @@
         <!-- ============================================== -->
         <section id="screen-proposal" class="screen">
             <div class="glass-card proposal-card">
+                <div id="confetti-container-proposal"></div>
                 <div class="proposal-heart-badge">💖</div>
                 
                 <!-- Petit texte d'introduction -->
@@ -224,11 +225,9 @@
                     <span class="proposal-highlight">Will you be my girlfriend ?</span> ❤️
                 </h1>
 
-                <!-- Bouton pour répondre par message -->
-                <div class="proposal-buttons mt-4">
-                    
-                        Me répondre sur WhatsApp
-                    
+                <!-- Message d'invitation sans bouton cliquable -->
+                <div class="proposal-whatsapp-box mt-4">
+                    <p class="proposal-whatsapp-note">💬 Viens me donner ta réponse sur WhatsApp… ✨</p>
                 </div>
             </div>
         </section>

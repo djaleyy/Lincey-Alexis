@@ -681,6 +681,80 @@ p {
   overflow-y: auto;
 }
 
+/* ÉCRAN DE PROPOSITION & MESSAGE WHATSAPP */
+.proposal-card {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.proposal-heart-badge {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  animation: pulseGlow 1.5s infinite ease-in-out;
+  display: inline-block;
+}
+
+.proposal-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+
+.proposal-title {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-family: var(--font-serif);
+  margin-bottom: 28px;
+  line-height: 1.25;
+}
+
+.proposal-highlight {
+  background: linear-gradient(135deg, #D81B60 0%, #E295A9 50%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+.proposal-whatsapp-box {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px 24px;
+  display: inline-block;
+  box-shadow: 0 8px 20px rgba(216, 27, 96, 0.08);
+  margin-top: 10px;
+}
+
+.proposal-whatsapp-note {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--accent-framboise);
+  margin-bottom: 0;
+  letter-spacing: 0.01em;
+}
+
+/* --------------------------------------------------------------------------
+   CONFETTIS DEBORDEMENT ET POSITIONNEMENT FIXE
+   -------------------------------------------------------------------------- */
+[id^="confetti-container"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 9999 !important;
+  overflow: hidden !important;
+}
+
+.burst-confetti {
+  position: fixed !important;
+  pointer-events: none !important;
+  z-index: 9999 !important;
+  will-change: transform, opacity;
+}
+
 /* --------------------------------------------------------------------------
    13. ANIMATIONS KEYFRAMES ET EFFETS FLOTTANTS
    -------------------------------------------------------------------------- */

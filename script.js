@@ -191,7 +191,7 @@ function runPreloader() {
 }
 
 // ==========================================
-// GESTION DE LA MUSIQUE D'AMBIANCE AUTOMATIQUE (YOUTUBE API - Ordinary par Alex Warren)
+// GESTION DE LA MUSIQUE D'AMBIANCE AUTOMATIQUE (Adele - Lovesong Officiel)
 // ==========================================
 let ytPlayer = null;
 let isYtReady = false;
@@ -203,13 +203,14 @@ function initYouTubePlayer() {
         ytPlayer = new YT.Player('youtube-player', {
             height: '1',
             width: '1',
-            videoId: 'u2ah9tWTkmk', // Alex Warren - Ordinary
+            videoId: 'NSec3LfUWxE', // Adele - Lovesong (Version Studio Officielle)
             playerVars: {
                 'autoplay': 1,
                 'controls': 0,
                 'loop': 1,
-                'playlist': 'u2ah9tWTkmk',
-                'playsinline': 1
+                'playlist': 'NSec3LfUWxE',
+                'playsinline': 1,
+                'enablejsapi': 1
             },
             events: {
                 'onReady': onPlayerReady,
@@ -230,7 +231,7 @@ function initYouTubePlayer() {
 function onPlayerReady(event) {
     isYtReady = true;
     try {
-        event.target.setVolume(60);
+        event.target.setVolume(75);
     } catch(e) {}
 }
 
@@ -260,25 +261,40 @@ function onPlayerStateChange(event) {
 }
 
 function playMusic() {
-    const bgAudio = document.getElementById('bg-music');
-    let playedLocal = false;
+    let played = false;
 
-    if (bgAudio && bgAudio.src && bgAudio.duration > 0 && !isNaN(bgAudio.duration)) {
-        bgAudio.volume = 0.5;
-        bgAudio.play().then(() => {
-            playedLocal = true;
+    // 1. Priorité absolue au lecteur YouTube (Adele - Lovesong Version Officielle)
+    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+        try {
+            if (typeof ytPlayer.unMute === 'function') ytPlayer.unMute();
+            if (typeof ytPlayer.setVolume === 'function') ytPlayer.setVolume(75);
+            ytPlayer.playVideo();
             updateMusicUI(true);
-        }).catch(() => {
-            attemptYouTubePlay();
-        });
-    } else {
-        attemptYouTubePlay();
+            played = true;
+        } catch (e) {
+            console.log("Lecture YouTube (Adele - Lovesong) en attente...", e);
+        }
+    }
+
+    // 2. Fallback Audio HTML5 local si YouTube n'est pas disponible
+    if (!played) {
+        const bgAudio = document.getElementById('bg-music');
+        if (bgAudio) {
+            bgAudio.volume = 0.6;
+            bgAudio.play().then(() => {
+                updateMusicUI(true);
+            }).catch(err => {
+                console.log("Lecture audio locale bloquée", err);
+            });
+        }
     }
 }
 
 function attemptYouTubePlay() {
     if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
         try {
+            if (typeof ytPlayer.unMute === 'function') ytPlayer.unMute();
+            if (typeof ytPlayer.setVolume === 'function') ytPlayer.setVolume(60);
             ytPlayer.playVideo();
             updateMusicUI(true);
         } catch (e) {
@@ -293,9 +309,7 @@ function pauseMusic() {
         try { bgAudio.pause(); } catch(e) {}
     }
     if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
-        try {
-            ytPlayer.pauseVideo();
-        } catch (e) {}
+        try { ytPlayer.pauseVideo(); } catch (e) {}
     }
     updateMusicUI(false);
 }
@@ -396,7 +410,6 @@ function initEventListeners() {
     if (btnDiscoverCollection) {
         btnDiscoverCollection.addEventListener('click', () => {
             showScreen(screens.proposal);
-            triggerConfetti('confetti-container');
         });
     }
 
@@ -505,7 +518,6 @@ function startSecretTransition() {
 // ==========================================
 function startGrandFinale() {
     showScreen(screens.grandFinale);
-    triggerConfetti('confetti-container-finale');
 }
 
 // ==========================================
