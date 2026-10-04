@@ -191,7 +191,7 @@ function runPreloader() {
 }
 
 // ==========================================
-// GESTION DE LA MUSIQUE D'AMBIANCE AUTOMATIQUE (Adele - Lovesong Officiel)
+// GESTION DE LA MUSIQUE D'AMBIANCE AUTOMATIQUE (music.mp3 local & YouTube fallback)
 // ==========================================
 let ytPlayer = null;
 let isYtReady = false;
@@ -214,7 +214,8 @@ function initYouTubePlayer() {
             },
             events: {
                 'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
+                'onStateChange': onPlayerStateChange,
+                'onError': onPlayerError
             }
         });
     }
@@ -233,6 +234,15 @@ function onPlayerReady(event) {
     try {
         event.target.setVolume(75);
     } catch(e) {}
+}
+
+function onPlayerError(event) {
+    console.log("Erreur de lecture YouTube, basculement vers la musique locale...", event.data);
+    const bgAudio = document.getElementById('bg-music');
+    if (bgAudio) {
+        bgAudio.volume = 0.7;
+        bgAudio.play().then(() => updateMusicUI(true)).catch(err => console.log("Basculement audio bloqué", err));
+    }
 }
 
 function updateMusicUI(playing) {
@@ -261,32 +271,22 @@ function onPlayerStateChange(event) {
 }
 
 function playMusic() {
-    let played = false;
-
-    // 1. Priorité absolue au lecteur YouTube (Adele - Lovesong Version Officielle)
-    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-        try {
-            if (typeof ytPlayer.unMute === 'function') ytPlayer.unMute();
-            if (typeof ytPlayer.setVolume === 'function') ytPlayer.setVolume(75);
-            ytPlayer.playVideo();
-            updateMusicUI(true);
-            played = true;
-        } catch (e) {
-            console.log("Lecture YouTube (Adele - Lovesong) en attente...", e);
-        }
-    }
-
-    // 2. Fallback Audio HTML5 local si YouTube n'est pas disponible
-    if (!played) {
-        const bgAudio = document.getElementById('bg-music');
-        if (bgAudio) {
-            bgAudio.volume = 0.6;
-            bgAudio.play().then(() => {
+    const bgAudio = document.getElementById('bg-music');
+    
+    // 1. Priorité absolue au fichier audio local (music.mp3) qui est instantané et 100% fiable
+    if (bgAudio) {
+        bgAudio.volume = 0.7;
+        const playPromise = bgAudio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
                 updateMusicUI(true);
             }).catch(err => {
-                console.log("Lecture audio locale bloquée", err);
+                console.log("Lecture audio locale bloquée par le navigateur, tentative YouTube...", err);
+                attemptYouTubePlay();
             });
         }
+    } else {
+        attemptYouTubePlay();
     }
 }
 
@@ -294,7 +294,7 @@ function attemptYouTubePlay() {
     if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
         try {
             if (typeof ytPlayer.unMute === 'function') ytPlayer.unMute();
-            if (typeof ytPlayer.setVolume === 'function') ytPlayer.setVolume(60);
+            if (typeof ytPlayer.setVolume === 'function') ytPlayer.setVolume(75);
             ytPlayer.playVideo();
             updateMusicUI(true);
         } catch (e) {
@@ -324,8 +324,15 @@ function toggleMusic() {
 
 function initMusicControl() {
     const musicToggle = document.getElementById('music-toggle');
+    const bgAudio = document.getElementById('bg-music');
 
     window.attemptAutoPlayMusic = playMusic;
+
+    if (bgAudio) {
+        bgAudio.addEventListener('play', () => updateMusicUI(true));
+        bgAudio.addEventListener('pause', () => updateMusicUI(false));
+        bgAudio.addEventListener('ended', () => updateMusicUI(false));
+    }
 
     if (musicToggle) {
         musicToggle.addEventListener('click', (e) => {
